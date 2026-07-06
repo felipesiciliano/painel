@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IBIAS - Painel Operacional de Encontrabilidade</title>
+    <title>IBIAS - Sistema de Gestão de Encontrabilidade</title>
     <style>
         :root {
             --primary-blue: #0b2b61;
@@ -11,88 +11,84 @@
             --pin-green: #418b58;
             --pin-blue: #2a4c87;
             --bg-light: #f8fafc;
+            --card-bg: #ffffff;
             --text-dark: #0f172a;
+            --border-color: #e2e8f0;
             --sidebar-width: 260px;
             --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
         }
 
         body.dark-mode {
-            --bg-light: #0f172a;
+            --bg-light: #020617;
+            --card-bg: #1e293b;
             --text-dark: #f8fafc;
-            background-color: #020617;
+            --border-color: #334155;
+            --primary-blue: #38bdf8;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--bg-light); color: var(--text-dark); display: flex; min-height: 100vh; transition: background-color 0.3s; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--bg-light); color: var(--text-dark); display: flex; min-height: 100vh; transition: background-color 0.2s; }
 
-        /* Menu Lateral Estilo CRM */
-        .sidebar { width: var(--sidebar-width); background-color: #ffffff; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; position: fixed; height: 100vh; z-index: 10; transition: background-color 0.3s, border-color 0.3s; }
-        body.dark-mode .sidebar { background-color: #1e293b; border-right-color: #334155; }
+        /* Menu Lateral SaaS/CRM Style */
+        .sidebar { width: var(--sidebar-width); background-color: var(--card-bg); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; position: fixed; height: 100vh; z-index: 10; transition: background-color 0.2s, border-color 0.2s; }
         
-        .brand { padding: 24px; display: flex; flex-direction: column; align-items: center; border-bottom: 1px solid #f1f5f9; gap: 8px; }
-        body.dark-mode .brand { border-bottom-color: #334155; }
-        
-        /* Ajuste de Proteção e Exibição da Logo */
-        .brand img { max-height: 65px; width: auto; background: white; padding: 4px 10px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); object-fit: contain; }
-        .brand h2 { font-size: 20px; font-weight: 800; letter-spacing: 2px; color: var(--primary-blue); margin-top: 5px; }
-        body.dark-mode .brand h2 { color: #f8fafc; }
+        .brand { padding: 20px; display: flex; flex-direction: column; align-items: center; border-bottom: 1px solid var(--border-color); gap: 6px; }
+        .brand img { max-height: 60px; width: auto; background: white; padding: 4px 10px; border-radius: 6px; box-shadow: var(--card-shadow); }
+        .brand h2 { font-size: 18px; font-weight: 800; letter-spacing: 2px; color: #0b2b61; margin-top: 5px; }
+        body.dark-mode .brand h2 { color: #ffffff; }
 
-        .menu-items { list-style: none; padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; flex-grow: 1; }
+        .menu-items { list-style: none; padding: 12px; display: flex; flex-direction: column; gap: 4px; flex-grow: 1; overflow-y: auto; }
         .menu-btn { width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px; border: none; background: none; border-radius: 8px; color: #64748b; font-weight: 600; font-size: 14px; cursor: pointer; text-align: left; transition: all 0.2s; }
         body.dark-mode .menu-btn { color: #94a3b8; }
-        .menu-btn:hover { background-color: #f1f5f9; color: var(--primary-blue); }
+        .menu-btn:hover { background-color: #f1f5f9; color: #0b2b61; }
         body.dark-mode .menu-btn:hover { background-color: #334155; color: #fff; }
-        .menu-btn.active { background-color: #f0f4f8; color: var(--primary-blue); }
-        body.dark-mode .menu-btn.active { background-color: var(--primary-blue); color: #fff; }
+        .menu-btn.active { background-color: #f0f4f8; color: #0b2b61; }
+        body.dark-mode .menu-btn.active { background-color: #0b2b61; color: #fff; }
 
-        .sidebar-footer { padding: 16px; border-top: 1px solid #f1f5f9; display: flex; justify-content: space-between; }
-        body.dark-mode .sidebar-footer { border-top-color: #334155; }
-        .toggle-mode-btn { background: none; border: none; font-size: 13px; font-weight: 600; cursor: pointer; color: #64748b; }
+        .sidebar-footer { padding: 12px; border-top: 1px solid var(--border-color); display: flex; justify-content: center; }
+        .toggle-mode-btn { width: 100%; padding: 8px; background-color: #f1f5f9; border: 1px solid var(--border-color); border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; color: #64748b; }
+        body.dark-mode .toggle-mode-btn { background-color: #334155; color: #fff; }
 
-        /* Área de Conteúdo Principal */
-        .main-content { margin-left: var(--sidebar-width); flex-grow: 1; padding: 40px; width: calc(100% - var(--sidebar-width)); }
-        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; border-bottom: 2px solid #e2e8f0; padding-bottom: 16px; }
-        body.dark-mode .page-header { border-bottom-color: #334155; }
-        .page-title { font-size: 24px; font-weight: 700; color: var(--primary-blue); }
+        /* Área de Conteúdo Central */
+        .main-content { margin-left: var(--sidebar-width); flex-grow: 1; padding: 40px; width: calc(100% - var(--sidebar-width)); min-height: 100vh; }
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; border-bottom: 2px solid var(--border-color); padding-bottom: 16px; }
+        .page-title { font-size: 22px; font-weight: 700; color: #0b2b61; }
         body.dark-mode .page-title { color: #fff; }
 
         .action-group { display: flex; gap: 12px; align-items: center; }
-        .btn-action { padding: 8px 16px; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s; }
-        body.dark-mode .btn-action { background: #334155; color: #fff; border-color: #475569; }
+        .btn-action { padding: 8px 16px; border-radius: 6px; border: 1px solid #cbd5e1; background: var(--card-bg); color: inherit; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s; }
         .btn-action:hover { background: #f8fafc; border-color: #94a3b8; }
+        body.dark-mode .btn-action:hover { background: #334155; }
         .btn-save-indicator { font-size: 12px; color: var(--pin-green); font-weight: bold; opacity: 0; transition: opacity 0.3s; }
 
-        /* SPA Containers */
+        /* Abas Estilo SPA */
         .tab-panel { display: none; animation: fadeIn 0.2s ease-in-out; }
         .tab-panel.active { display: block; }
 
-        .grid-layout { display: grid; grid-template-columns: 1fr 2.5fr; gap: 25px; }
-        .meta-fields { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 5px; }
-
-        /* Cartões de Critérios */
-        .criterion-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-bottom: 32px; }
-        .criterion-card { background: #fff; border-radius: 12px; padding: 24px; box-shadow: var(--card-shadow); border-top: 4px solid var(--primary-blue); }
-        body.dark-mode .criterion-card { background: #1e293b; }
-        .criterion-card.encontrar { border-top-color: var(--pin-orange); }
-        .criterion-card.confiar { border-top-color: var(--pin-green); }
-        .criterion-card.escolhido { border-top-color: var(--pin-blue); }
+        /* Grid de Cartões de Diagnóstico */
+        .criterion-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-bottom: 24px; }
+        .criterion-card { background: var(--card-bg); border-radius: 12px; padding: 24px; box-shadow: var(--card-shadow); border-top: 4px solid #0b2b61; border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); border-left: 1px solid var(--border-color); }
+        .criterion-card.orange { border-top-color: var(--pin-orange); }
+        .criterion-card.green { border-top-color: var(--pin-green); }
+        .criterion-card.blue { border-top-color: var(--pin-blue); }
 
         .card-title { font-size: 15px; font-weight: 700; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; }
-        .score-badge { padding: 4px 8px; border-radius: 12px; background: #f1f5f9; font-size: 11px; font-weight: bold; }
-        body.dark-mode .score-badge { background: #334155; }
+        .score-badge { padding: 4px 8px; border-radius: 12px; background: #f1f5f9; font-size: 11px; font-weight: bold; color: #0f172a; }
+        body.dark-mode .score-badge { background: #334155; color: #fff; }
 
         .checklist-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; font-size: 14px; cursor: pointer; user-select: none; }
         .checklist-item input[type="checkbox"] { margin-top: 4px; cursor: pointer; }
 
+        /* Formulários e Inputs */
+        .grid-layout { display: grid; grid-template-columns: 1fr 2.5fr; gap: 25px; }
+        .meta-fields { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 5px; }
         .form-group { margin-bottom: 15px; width: 100%; }
-        .form-group label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 6px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
-        .input-text { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; font-size: 14px; background: #fff; color: inherit; }
-        body.dark-mode .input-text { background: #1e293b; border-color: #475569; }
-        .textarea-field { width: 100%; height: 140px; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; font-size: 14px; resize: vertical; background: #fff; color: inherit; line-height: 1.5; }
-        body.dark-mode .textarea-field { background: #1e293b; border-color: #475569; }
+        .form-group label { display: block; font-size: 11px; font-weight: 700; margin-bottom: 6px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+        .input-text { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; font-size: 14px; background: var(--card-bg); color: inherit; }
+        .textarea-field { width: 100%; height: 140px; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; font-size: 14px; resize: vertical; background: var(--card-bg); color: inherit; line-height: 1.5; }
 
-        .manifesto-box { background: white; border-radius: 8px; padding: 20px; margin-bottom: 30px; box-shadow: var(--card-shadow); border-left: 4px solid var(--pin-green); font-style: italic; font-size: 14px; color: #475569; }
-        body.dark-mode .manifesto-box { background: #1e293b; color: #94a3b8; }
+        .manifesto-box { background: var(--card-bg); border-radius: 8px; padding: 20px; margin-bottom: 24px; box-shadow: var(--card-shadow); border-left: 4px solid var(--pin-green); border-top: 1px solid var(--border-color); border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); font-style: italic; font-size: 14px; color: #475569; }
+        body.dark-mode .manifesto-box { color: #94a3b8; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -101,56 +97,56 @@
             .main-content { margin-left: 0 !important; width: 100% !important; padding: 0 !important; }
             .action-group { display: none !important; }
             .tab-panel { display: block !important; margin-bottom: 40px; page-break-inside: avoid; }
-            .criterion-card { box-shadow: none !important; border: 1px solid #cbd5e1 !important; }
-            textarea, input { border: none !important; background: transparent !important; padding: 0 !important; resize: none !important; }
         }
     </style>
-</head>
-<body>
+    <!-- Inteligência JavaScript Otimizada com Carregamento Prévio (Defer) -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            // 1. Controle Avançado de Abas (Lógica Automática Reativa)
+            const menuButtons = document.querySelectorAll(".menu-btn");
+            const tabPanels = document.querySelectorAll(".tab-panel");
+            const dynamicTitle = document.getElementById("dynamicTitle");
 
-    <!-- MENU CRM -->
-    <nav class="sidebar">
-        <div class="brand">
-            <!-- Puxa automaticamente o arquivo logo.png do repositório -->
-            <img src="logo.png" alt="IBIAS" onerror="this.style.display='none';">
-            <h2>IBIAS</h2>
-            <p style="font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; font-weight: bold;">Encontrabilidade</p>
-        </div>
+            menuButtons.forEach(btn => {
+                btn.addEventListener("click", () => {
+                    // Remove classes ativas de tudo
+                    menuButtons.forEach(b => b.classList.remove("active"));
+                    tabPanels.forEach(p => p.classList.remove("active"));
 
-        <ul class="menu-items">
-            <li><button class="menu-btn active" data-target="inicio">🏠 Início / Clientes</button></li>
-            <li><button class="menu-btn" data-target="video">📹 Vídeo PDV</button></li>
-            <li><button class="menu-btn" data-target="mapa">🟠 Mapa Operacional</button></li>
-            <li><button class="menu-btn" data-target="rota">🟢 Rota Prática</button></li>
-            <li><button class="menu-btn" data-target="radar">🔵 Radar Mensal</button></li>
-        </ul>
+                    // Ativa o botão clicado e a respectiva aba
+                    btn.classList.add("active");
+                    const targetId = btn.getAttribute("data-target");
+                    const targetPanel = document.getElementById(targetId);
+                    
+                    if (targetPanel) {
+                        targetPanel.classList.add("active");
+                    }
+                    
+                    // Atualiza o cabeçalho dinamicamente
+                    dynamicTitle.textContent = btn.textContent.replace(/[^\w\sÀ-ú]/g, '').trim();
+                });
+            });
 
-        <div class="sidebar-footer">
-            <button class="toggle-mode-btn" id="themeToggle">🌓 Alternar Tema</button>
-        </div>
-    </nav>
+            // 2. Sistema Estrelas/Checklist das Etapas Clínicas
+            const checkboxes = document.querySelectorAll(".chk-score");
+            
+            function calculateSystemScores() {
+                const groups = ['encontrar', 'confiar', 'escolhido'];
+                groups.forEach(group => {
+                    const allCheckboxes = document.querySelectorAll(`.chk-score[data-group="${group}"]`);
+                    const checkedCount = Array.from(allCheckboxes).filter(c => c.checked).length;
+                    
+                    // Transforma a métrica em estrelas visuais (Max 5 estrelas)
+                    const totalChecks = allCheckboxes.length;
+                    const starRating = totalChecks > 0 ? ((checkedCount / totalChecks) * 5).toFixed(1) : "0.0";
+                    
+                    const badge = document.getElementById(`score${group.charAt(0).toUpperCase() + group.slice(1)}`);
+                    if (badge) {
+                        badge.textContent = `Nota: ${starRating} ★`;
+                    }
+                });
+            }
 
-    <!-- CONTEÚDO PRINCIPAL -->
-    <main class="main-content">
-        <header class="page-header">
-            <div>
-                <h1 class="page-title" id="dynamicTitle">Início / Clientes</h1>
-                <p style="font-size: 13px; color: #64748b; margin-top: 4px;">Ambiente de Desenvolvimento Estratégico IBIAS</p>
-            </div>
-            <div class="action-group">
-                <span class="btn-save-indicator" id="saveIndicator">✓ Alterações salvas</span>
-                <button class="btn-action" id="btnPrint">🖨️ PDF / Imprimir</button>
-                <button class="btn-action" id="btnClear">🧹 Limpar Painel</button>
-            </div>
-        </header>
-
-        <!-- ABA 1: INÍCIO -->
-        <section id="inicio" class="tab-panel active">
-            <div class="criterion-card" style="margin-bottom: 24px;">
-                <h3 class="card-title">Ficha Cadastral do Terreno</h3>
-                <div class="meta-fields">
-                    <div class="form-group">
-                        <label>Nome do Empresário:</label>
-                        <input type="text" class="input-text storage-bind" id="clientName" placeholder="Ex: Nelson">
-                    </div>
-                    <div class="form-group">
+            checkboxes.forEach(chk => {
+                chk.addEventListener("change", () => {
